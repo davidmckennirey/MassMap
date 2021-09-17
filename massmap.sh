@@ -53,11 +53,12 @@ portScan(){
         sudo rm "$WORKING_DIR/paused.conf"
     fi
     open_ports=$(cat $RESULTS_PATH/masscan.xml | grep portid | cut -d "\"" -f 10 | sort -n | uniq | paste -sd,)
+    echo "open ports: $open_ports"
     cat $RESULTS_PATH/masscan.xml | grep portid | cut -d "\"" -f 4 | sort -V | uniq > $WORKING_DIR/nmap_targets.tmp
     echo -e "${RED}[*] Masscan Done!"
 
     echo -e "${GREEN}[+] Running Nmap.${RESET}"
-    sudo nmap -sVC -p $open_ports --open -v -Pn -n -T4 -iL $WORKING_DIR/nmap_targets.tmp -oX $RESULTS_PATH/nmap.xml
+    sudo nmap -sVC -p $open_ports --open -v -Pn -n -T4 -iL $WORKING_DIR/nmap_targets.tmp -oA $RESULTS_PATH/nmap
     sudo rm $WORKING_DIR/nmap_targets.tmp
     xsltproc -o $RESULTS_PATH/nmap-native.html $RESULTS_PATH/nmap.xml
     xsltproc -o $RESULTS_PATH/nmap-bootstrap.html $WORKING_DIR/bootstrap-nmap.xsl $RESULTS_PATH/nmap.xml
