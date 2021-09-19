@@ -58,8 +58,9 @@ portScan(){
     echo -e "${RED}[*] Masscan Done!"
 
     echo -e "${GREEN}[+] Running Nmap.${RESET}"
-    sudo nmap -sVC -p $open_ports --open -v -Pn -n -T4 -iL $WORKING_DIR/nmap_targets.tmp -oA $RESULTS_PATH/nmap
-    sudo rm $WORKING_DIR/nmap_targets.tmp
+    sudo nmap -v -sS -sV -sC -T4 -Pn -R -O --version-all --reason --script-timeout 30m --script default,http-enum,http-default-accounts,http-config-backup,http-auth-finder,http-method-tamper,http-vuln-cve2010-0738,http-vuln-cve2010-2861,http-vuln-cve2012-1823,smb-enum-users,smb-enum-shares,nfs-showmount,nfs-statfs,dns-zone-transfer,dns-update,sip-enum-users,afp-ls,ntp-monlist,http-vmware-path-vuln,http-vuln-cve2013-0156,http-coldfusion-subzero,http-adobe-coldfusion-apsa1301,ssl-heartbleed -iL $WORKING_DIR/nmap_targets.tmp -oA $RESULTS_PATH/nmap
+    # Uncomment the following line to remove the list of targets after execution
+    # sudo rm $WORKING_DIR/nmap_targets.tmp
     xsltproc -o $RESULTS_PATH/nmap-native.html $RESULTS_PATH/nmap.xml
     xsltproc -o $RESULTS_PATH/nmap-bootstrap.html $WORKING_DIR/bootstrap-nmap.xsl $RESULTS_PATH/nmap.xml
     echo -e "${RED}[*] Nmap Done! View the HTML reports at $RESULTS_PATH${RESET}"
