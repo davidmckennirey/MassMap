@@ -5,7 +5,7 @@ VERSION="2.0"
 TARGET="$1"
 
 WORKING_DIR="$(cd "$(dirname "$0")" ; pwd -P)"
-RESULTS_PATH="$WORKING_DIR/results"
+RESULTS_PATH="$2"
 
 RED="\033[1;31m"
 GREEN="\033[1;32m"
